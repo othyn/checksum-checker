@@ -69,6 +69,23 @@ namespace Checksum_Checker {
 		OpenFileDialog openFD = new OpenFileDialog();
 		// Creates a global new OpenFileDialog instance openFD
 
+		private bool isSHA1Hash(string hash, bool result = false) {
+			// Checks via regex if the given SHA1 Hexadecimal hash is valid
+
+			Regex regex = new Regex("[0-9a-fA-F]{40}");
+			// Create a new Regex object with the regex pattern
+			// See http://stackoverflow.com/a/1896748/4494375 for regex pattern
+
+			Match match = regex.Match(hash);
+			// Create a new instance of match and check the regex pattern against the submitted Hexadecimal MD5 hash
+
+			if (match.Success) result = true;
+			// If the match is a success change the result to true
+
+			return result;
+			// Return the boolean state
+		}
+
 		private bool isMD5Hash(string hash, bool result = false) {
 			// Checks via regex if the given MD5 Hexadecimal hash is valid
 
@@ -131,7 +148,8 @@ namespace Checksum_Checker {
 			// Reset the seconds passed to zero
 
 			computedMD5Hash = "";
-			// Reset the computed hash variable
+			computedSHA1Hash = "";
+			// Reset the computed hash variables
 
 			textboxComputedHash.Text = "";
 			// Reset the computed hash textbox
@@ -394,6 +412,13 @@ namespace Checksum_Checker {
 			// Set the tool strip label, toolstripTimeElapsedTime, to the formatted time string from the new TimeSpan object, t
 			//	See http://stackoverflow.com/a/463668
 			//	Also see https://msdn.microsoft.com/en-us/library/dwhawy9k.aspx for format strings
+		}
+
+		private void comboboxSelectHashType_SelectionChangeCommitted(object sender, EventArgs e) {
+			// This function fires ONLY when the user changes the combobox value, not when its changed programmatically
+			//	See http://stackoverflow.com/a/1066069/4494375
+
+
 		}
 
     }

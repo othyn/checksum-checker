@@ -41,22 +41,24 @@
 			this.computeFileHash = new System.ComponentModel.BackgroundWorker();
 			this.statusStripMain = new System.Windows.Forms.StatusStrip();
 			this.toolstripprogressbarComputeProgress = new System.Windows.Forms.ToolStripProgressBar();
+			this.toolstripTimeElapsedTitle = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolstripTimeElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolstripDivider = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolstripProgressTitle = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolstripProgressCurrentByteCount = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolstripProgressVisualDivider = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolstripProgressTotalByteCount = new System.Windows.Forms.ToolStripStatusLabel();
 			this.pollCurrentBytesCompleted = new System.Windows.Forms.Timer(this.components);
-			this.toolstripTimeElapsedTitle = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolstripDivider = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolstripTimeElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timeElapsed = new System.Windows.Forms.Timer(this.components);
 			this.buttonCancelHash = new System.Windows.Forms.Button();
+			this.comboboxSelectHashType = new System.Windows.Forms.ComboBox();
+			this.labelSelectHashType = new System.Windows.Forms.Label();
 			this.statusStripMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textboxFilePath
 			// 
-			this.textboxFilePath.Location = new System.Drawing.Point(12, 34);
+			this.textboxFilePath.Location = new System.Drawing.Point(12, 25);
 			this.textboxFilePath.Name = "textboxFilePath";
 			this.textboxFilePath.ReadOnly = true;
 			this.textboxFilePath.Size = new System.Drawing.Size(434, 20);
@@ -65,7 +67,7 @@
 			// labelFilePath
 			// 
 			this.labelFilePath.AutoSize = true;
-			this.labelFilePath.Location = new System.Drawing.Point(12, 18);
+			this.labelFilePath.Location = new System.Drawing.Point(12, 9);
 			this.labelFilePath.Name = "labelFilePath";
 			this.labelFilePath.Size = new System.Drawing.Size(26, 13);
 			this.labelFilePath.TabIndex = 2;
@@ -73,7 +75,7 @@
 			// 
 			// textboxComputedHash
 			// 
-			this.textboxComputedHash.Location = new System.Drawing.Point(12, 82);
+			this.textboxComputedHash.Location = new System.Drawing.Point(12, 122);
 			this.textboxComputedHash.Name = "textboxComputedHash";
 			this.textboxComputedHash.ReadOnly = true;
 			this.textboxComputedHash.Size = new System.Drawing.Size(434, 20);
@@ -82,7 +84,7 @@
 			// labelComputedHash
 			// 
 			this.labelComputedHash.AutoSize = true;
-			this.labelComputedHash.Location = new System.Drawing.Point(12, 66);
+			this.labelComputedHash.Location = new System.Drawing.Point(12, 106);
 			this.labelComputedHash.Name = "labelComputedHash";
 			this.labelComputedHash.Size = new System.Drawing.Size(86, 13);
 			this.labelComputedHash.TabIndex = 2;
@@ -90,7 +92,7 @@
 			// 
 			// textboxHashToCompare
 			// 
-			this.textboxHashToCompare.Location = new System.Drawing.Point(12, 131);
+			this.textboxHashToCompare.Location = new System.Drawing.Point(12, 171);
 			this.textboxHashToCompare.Name = "textboxHashToCompare";
 			this.textboxHashToCompare.Size = new System.Drawing.Size(434, 20);
 			this.textboxHashToCompare.TabIndex = 0;
@@ -98,7 +100,7 @@
 			// labelHashToCompare
 			// 
 			this.labelHashToCompare.AutoSize = true;
-			this.labelHashToCompare.Location = new System.Drawing.Point(12, 115);
+			this.labelHashToCompare.Location = new System.Drawing.Point(12, 155);
 			this.labelHashToCompare.Name = "labelHashToCompare";
 			this.labelHashToCompare.Size = new System.Drawing.Size(92, 13);
 			this.labelHashToCompare.TabIndex = 2;
@@ -106,7 +108,7 @@
 			// 
 			// buttonOpenFileDialog
 			// 
-			this.buttonOpenFileDialog.Location = new System.Drawing.Point(452, 32);
+			this.buttonOpenFileDialog.Location = new System.Drawing.Point(452, 23);
 			this.buttonOpenFileDialog.Name = "buttonOpenFileDialog";
 			this.buttonOpenFileDialog.Size = new System.Drawing.Size(95, 23);
 			this.buttonOpenFileDialog.TabIndex = 3;
@@ -116,7 +118,7 @@
 			// 
 			// buttonGetHash
 			// 
-			this.buttonGetHash.Location = new System.Drawing.Point(452, 80);
+			this.buttonGetHash.Location = new System.Drawing.Point(452, 120);
 			this.buttonGetHash.Name = "buttonGetHash";
 			this.buttonGetHash.Size = new System.Drawing.Size(95, 23);
 			this.buttonGetHash.TabIndex = 3;
@@ -126,7 +128,7 @@
 			// 
 			// buttonCompareHash
 			// 
-			this.buttonCompareHash.Location = new System.Drawing.Point(452, 129);
+			this.buttonCompareHash.Location = new System.Drawing.Point(452, 169);
 			this.buttonCompareHash.Name = "buttonCompareHash";
 			this.buttonCompareHash.Size = new System.Drawing.Size(95, 23);
 			this.buttonCompareHash.TabIndex = 3;
@@ -153,7 +155,7 @@
             this.toolstripProgressCurrentByteCount,
             this.toolstripProgressVisualDivider,
             this.toolstripProgressTotalByteCount});
-			this.statusStripMain.Location = new System.Drawing.Point(0, 173);
+			this.statusStripMain.Location = new System.Drawing.Point(0, 205);
 			this.statusStripMain.Name = "statusStripMain";
 			this.statusStripMain.Size = new System.Drawing.Size(559, 22);
 			this.statusStripMain.SizingGrip = false;
@@ -165,6 +167,24 @@
 			this.toolstripprogressbarComputeProgress.Name = "toolstripprogressbarComputeProgress";
 			this.toolstripprogressbarComputeProgress.Size = new System.Drawing.Size(150, 16);
 			this.toolstripprogressbarComputeProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			// 
+			// toolstripTimeElapsedTitle
+			// 
+			this.toolstripTimeElapsedTitle.Name = "toolstripTimeElapsedTitle";
+			this.toolstripTimeElapsedTitle.Size = new System.Drawing.Size(80, 17);
+			this.toolstripTimeElapsedTitle.Text = "Time Elapsed:";
+			// 
+			// toolstripTimeElapsedTime
+			// 
+			this.toolstripTimeElapsedTime.Name = "toolstripTimeElapsedTime";
+			this.toolstripTimeElapsedTime.Size = new System.Drawing.Size(49, 17);
+			this.toolstripTimeElapsedTime.Text = "00:00:00";
+			// 
+			// toolstripDivider
+			// 
+			this.toolstripDivider.Name = "toolstripDivider";
+			this.toolstripDivider.Size = new System.Drawing.Size(10, 17);
+			this.toolstripDivider.Text = "|";
 			// 
 			// toolstripProgressTitle
 			// 
@@ -197,24 +217,6 @@
 			this.pollCurrentBytesCompleted.Interval = 250;
 			this.pollCurrentBytesCompleted.Tick += new System.EventHandler(this.pollCurrentBytesCompleted_Tick);
 			// 
-			// toolstripTimeElapsedTitle
-			// 
-			this.toolstripTimeElapsedTitle.Name = "toolstripTimeElapsedTitle";
-			this.toolstripTimeElapsedTitle.Size = new System.Drawing.Size(80, 17);
-			this.toolstripTimeElapsedTitle.Text = "Time Elapsed:";
-			// 
-			// toolstripDivider
-			// 
-			this.toolstripDivider.Name = "toolstripDivider";
-			this.toolstripDivider.Size = new System.Drawing.Size(10, 17);
-			this.toolstripDivider.Text = "|";
-			// 
-			// toolstripTimeElapsedTime
-			// 
-			this.toolstripTimeElapsedTime.Name = "toolstripTimeElapsedTime";
-			this.toolstripTimeElapsedTime.Size = new System.Drawing.Size(49, 17);
-			this.toolstripTimeElapsedTime.Text = "00:00:00";
-			// 
 			// timeElapsed
 			// 
 			this.timeElapsed.Interval = 1000;
@@ -222,7 +224,7 @@
 			// 
 			// buttonCancelHash
 			// 
-			this.buttonCancelHash.Location = new System.Drawing.Point(452, 80);
+			this.buttonCancelHash.Location = new System.Drawing.Point(452, 120);
 			this.buttonCancelHash.Name = "buttonCancelHash";
 			this.buttonCancelHash.Size = new System.Drawing.Size(95, 23);
 			this.buttonCancelHash.TabIndex = 5;
@@ -231,16 +233,36 @@
 			this.buttonCancelHash.Visible = false;
 			this.buttonCancelHash.Click += new System.EventHandler(this.buttonCancelHash_Click);
 			// 
+			// comboboxSelectHashType
+			// 
+			this.comboboxSelectHashType.FormattingEnabled = true;
+			this.comboboxSelectHashType.Location = new System.Drawing.Point(12, 73);
+			this.comboboxSelectHashType.Name = "comboboxSelectHashType";
+			this.comboboxSelectHashType.Size = new System.Drawing.Size(535, 21);
+			this.comboboxSelectHashType.TabIndex = 6;
+			this.comboboxSelectHashType.SelectionChangeCommitted += new System.EventHandler(this.comboboxSelectHashType_SelectionChangeCommitted);
+			// 
+			// labelSelectHashType
+			// 
+			this.labelSelectHashType.AutoSize = true;
+			this.labelSelectHashType.Location = new System.Drawing.Point(12, 57);
+			this.labelSelectHashType.Name = "labelSelectHashType";
+			this.labelSelectHashType.Size = new System.Drawing.Size(95, 13);
+			this.labelSelectHashType.TabIndex = 2;
+			this.labelSelectHashType.Text = "Select Hash Type:";
+			// 
 			// mainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(559, 195);
+			this.ClientSize = new System.Drawing.Size(559, 227);
+			this.Controls.Add(this.comboboxSelectHashType);
 			this.Controls.Add(this.statusStripMain);
 			this.Controls.Add(this.buttonCompareHash);
 			this.Controls.Add(this.buttonOpenFileDialog);
 			this.Controls.Add(this.labelHashToCompare);
 			this.Controls.Add(this.labelComputedHash);
+			this.Controls.Add(this.labelSelectHashType);
 			this.Controls.Add(this.labelFilePath);
 			this.Controls.Add(this.textboxHashToCompare);
 			this.Controls.Add(this.textboxComputedHash);
@@ -284,6 +306,8 @@
 		private System.Windows.Forms.ToolStripStatusLabel toolstripTimeElapsedTime;
 		private System.Windows.Forms.Timer timeElapsed;
 		private System.Windows.Forms.Button buttonCancelHash;
+		private System.Windows.Forms.ComboBox comboboxSelectHashType;
+		private System.Windows.Forms.Label labelSelectHashType;
     }
 }
 
