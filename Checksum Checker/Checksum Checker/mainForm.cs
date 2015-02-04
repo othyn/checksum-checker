@@ -47,6 +47,9 @@ namespace Checksum_Checker {
 		// Hash types in a string array for loading into the combobox, comboboxSelectHashType
 		//	I'd much rarther keep this in the code, personal preference
 
+		int selectedHashType = 0;
+		// Selected hash type, from comboboxSelectHashType, by default the first item
+
 		string filePath;
 		// Global String variable to place the file path into (in this case the entire file path also)
 
@@ -77,13 +80,8 @@ namespace Checksum_Checker {
 			this.Text = "Checksum Checker V" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 			// Sets the Form Title Text plus the current version of the program
 
-			comboboxSelectHashType.Items.Clear();
-			comboboxSelectHashType.Items.AddRange(hashTypes);
-			comboboxSelectHashType.SelectedIndex = 0;
-			// Clear the current combo box, comboboxSelectHashType, not neccessary but keeps me happy
-			// Set the contents of the combo box, comboboxSelectHashType, from the array set above, hashTypes : see http://stackoverflow.com/a/23835964/4494375
-			//	I'd much rarther keep this in the code side, personal preference
-			// Set default loading item for the combo box, comboboxSelectHashType, to the first item
+			resetComboBoxSelectHashType();
+			// Reset the combo box, comboboxSelectHashType
 		}
 
 		private bool isSHA1Hash(string hash, bool result = false) {
@@ -133,7 +131,26 @@ namespace Checksum_Checker {
 			return string.Format("{0:n1} {1}", adjustedSize, SizeSuffixes[mag]);
 		}
 
-		private static string makeHashString(byte[] hashBytes) {
+		private static string makeSHA1HashString(byte[] hashBytes) {
+			// Takes the created hash, as a byte array, and returns the hash, converted into a string
+
+			StringBuilder hash = new StringBuilder(40);
+			// Creates a new StringBuilder, hash, with the initial capactity of 32, which is the length of an MD5 hash
+			//	Lengths:
+			//	MD5  = 32
+			//	SHA1 = 40
+
+			foreach (byte b in hashBytes) {
+				// Foreach of the bytes in hashBytes as new variable b
+				hash.Append(b.ToString("x2"));
+				// Convert the byte into a lowercase hexidecimal and append that to the StringBuilder, hash
+			}
+
+			return hash.ToString();
+			// Return the converted hash as a string
+		}
+
+		private static string makeMD5HashString(byte[] hashBytes) {
 			// Takes the created hash, as a byte array, and returns the hash, converted into a string
 
 			StringBuilder hash = new StringBuilder(32);
@@ -164,6 +181,9 @@ namespace Checksum_Checker {
 			secondsPassed = 0;
 			// Reset the seconds passed to zero
 
+			selectedHashType = 0;
+			// Reset the select items index
+
 			computedMD5Hash = "";
 			computedSHA1Hash = "";
 			// Reset the computed hash variables
@@ -176,6 +196,19 @@ namespace Checksum_Checker {
 
 			toolstripTimeElapsedTime.Text = "00:00:00";
 			// Reset the current elapsed time in the tool strip
+
+			return;
+		}
+
+		private void resetComboBoxSelectHashType() {
+
+			comboboxSelectHashType.Items.Clear();
+			comboboxSelectHashType.Items.AddRange(hashTypes);
+			comboboxSelectHashType.SelectedIndex = 0;
+			// Clear the current combo box, comboboxSelectHashType, not neccessary but keeps me happy
+			// Set the contents of the combo box, comboboxSelectHashType, from the array set above, hashTypes : see http://stackoverflow.com/a/23835964/4494375
+			//	I'd much rarther keep this in the code side, personal preference
+			// Set default loading item for the combo box, comboboxSelectHashType, to the first item
 
 			return;
 		}
@@ -213,6 +246,9 @@ namespace Checksum_Checker {
 					buttonCancelHash.Enabled = true;
 					buttonCancelHash.Visible = true;
 					// Enable and show the cancel hash button
+
+					selectedHashType = comboboxSelectHashType.SelectedIndex;
+					// Set the selectedHashType variable to that of the combo box, comboboxSelectHashType, selected item's index
 
 					computeFileHash.RunWorkerAsync();
 					// Proceed to the computeFileHash_DoWork function below to start computing the relevant hash on a new Thread
@@ -259,22 +295,63 @@ namespace Checksum_Checker {
 		private void buttonCompareHash_Click(object sender, EventArgs e) {
 			// Actions for when the button, buttonCompareHash, is clicked
 
-			if (isMD5Hash(textboxHashToCompare.Text)) {
-				// Send the content of the text box, textboxHashToCompare, to the isMD5Hash function to check if the user
-				//	has entered a valid MD5 hash
+			switch (selectedHashType) {
+				// Hey look, another switch statement!
+				//	See computeFileHash_DoWork function for references and stuff
 
-				if (textboxHashToCompare.Text == computedMD5Hash) {
-					MessageBox.Show("Success!\n\nThey are a match, it seems you have the correct file!\n\n:D", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					// Computed and Compared MD5 Hashes are the same
-				}
-				else {
-					MessageBox.Show("Warning!\n\nThese hashes do not match, you may have the wrong file or it has been sabotaged!\n\nI'd suggest re-downloading it directly from the source and trying again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					// Computed and Compared MD5 Hashes are NOT the same
-				}
-			}
-			else {
-				MessageBox.Show("Not a valid Hexadecimal MD5 Hash. Please try again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				// If they don't match, tell the user that
+				case 0:
+					// SHA1
+
+					if (isSHA1Hash(textboxHashToCompare.Text)) {
+						// Send the content of the text box, textboxHashToCompare, to the isMD5Hash function to check if the user
+						//	has entered a valid SHA1 hash
+
+						if (textboxHashToCompare.Text == computedSHA1Hash) {
+							MessageBox.Show("Success!\n\nThey are a match, it seems you have the correct file!\n\n:D", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+							// Computed and Compared MD5 Hashes are the same
+						}
+						else {
+							MessageBox.Show("Warning!\n\nThese hashes do not match, you may have the wrong file or it has been sabotaged!\n\nI'd recommend re-downloading it directly from the source and trying again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							// Computed and Compared MD5 Hashes are NOT the same
+						}
+					}
+					else {
+						MessageBox.Show("Not a valid Hexadecimal SHA1 Hash. Please try again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						// If they don't match, tell the user that
+					}
+
+					break;
+
+				case 1:
+					// MD5
+
+					if (isMD5Hash(textboxHashToCompare.Text)) {
+						// Send the content of the text box, textboxHashToCompare, to the isMD5Hash function to check if the user
+						//	has entered a valid MD5 hash
+
+						if (textboxHashToCompare.Text == computedMD5Hash) {
+							MessageBox.Show("Success!\n\nThey are a match, it seems you have the correct file!\n\n:D", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+							// Computed and Compared MD5 Hashes are the same
+						}
+						else {
+							MessageBox.Show("Warning!\n\nThese hashes do not match, you may have the wrong file or it has been sabotaged!\n\nI'd suggest re-downloading it directly from the source and trying again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							// Computed and Compared MD5 Hashes are NOT the same
+						}
+					}
+					else {
+						MessageBox.Show("Not a valid Hexadecimal MD5 Hash. Please try again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						// If they don't match, tell the user that
+					}
+
+					break;
+
+				default:
+					// Invalid
+
+					MessageBox.Show("Not a valid Hexadecimal MD5 Hash. Please try again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					// Oh dear! Well, lets reset the combo box as something went wrong... *looks at user, with suspicion*
+
+					break;
 			}
 		}
 
@@ -300,7 +377,7 @@ namespace Checksum_Checker {
 				// Sets the tool strip label, toolstripProgressTotalByteCount, to the value to size
 				//	Used for showing the user progression of the computation alongside the progress bar
 
-				switch (comboboxSelectHashType.SelectedIndex) {
+				switch (selectedHashType) {
 					// Determines the hash type to be used based on the combo box, comboboxSelectHashType, selection
 					//	See http://stackoverflow.com/a/3382204/4494375 for syntax reference
 
@@ -308,6 +385,59 @@ namespace Checksum_Checker {
 						// SHA1
 
 						using (HashAlgorithm hasher = SHA1.Create()) {
+							// Create a new HashAlgorithm, hasher, of the type SHA1 to do the hashing of the users selected file
+
+							do {
+								// See explanation below while... below
+
+								if (computeFileHash.CancellationPending) {
+									// Checks if the background worker, computeFileHash, has been told to cancel
+
+									e.Cancel = true;
+									// Cancel the background worker, computeFileHash
+
+									return;
+								}
+
+								buffer = new byte[4096];
+								// Initialise the buffer to a new byte array, to the size of 4096 bytes
+
+								bytesRead = file.Read(buffer, 0, buffer.Length);
+								// Read from the file - Read will return the amount of bytes read, so bytesRead gets updated with that amount
+								//	Arg1 - the buffer to read the file into - in this case the buffer setup just above
+								//	Arg2 - the buffer byte offset - where to start putting the file into the buffer, in this case the beginning, so start at zero
+								//	Arg3 - how many bytes to read - get the buffers length that we setup just above
+
+								totalBytesRead += bytesRead;
+								// Update the total for the amount of bytes read so far
+
+								hasher.TransformBlock(buffer, 0, bytesRead, null, 0);
+								// Creates the MD5 hash value for the bytes just read into the buffer, buffer, above
+								//	Arg1 - the input buffer to hash - in this case the buffer, buffer, in which the file was read into above
+								//	Arg2 - the input buffer byte offset - the offset to start reading the file from, in this case the beginning, so start at zero
+								//	Arg3 - the number of bytes to hash - we calculated this into the variable bytesRead above, so pass that as the argument
+								//	Arg4 - place the hash into an output buffer - dont need that, so pass null
+								//	Arg5 - the byte offset for the output buffer - set to zero as we dont need the offset, in both aspects
+
+								computeFileHash.ReportProgress((int)((double)totalBytesRead / size * 100));
+								// ReportProgress calls the background workers ProgressChanged function, in this case the
+								//	computeFileHash_ProgressChanged function below with the supplied argument being
+								//	an integer of the percentage of the file currently being hashed
+							}
+							while (bytesRead != 0);
+							// Keep looping over the files buffer until the bytesRead count equals zero, meaning there are no more bytes to be read
+							//	and the file has been processed and can move on to the full hash generation next
+
+							hasher.TransformFinalBlock(buffer, 0, 0);
+							// Transform the final block, put all the hashes together to make the full hash
+							//	Arg1 - the input buffer - so just pass the buffer, buffer, again
+							//	Arg2 - the input buffer byte offset - again, do not need the offset, start at the beginning, so set to zero
+							//	Arg3 - the byte count - the amount of bytes from buffer to be read, in this case zero, as we didn't read any new bytes
+
+							e.Result = makeSHA1HashString(hasher.Hash);
+							// Set the Result argument of the DoWorkEventArgs to the computed hash value
+							//	It is run through the custom makeMD5HashString function to first convert the computed byte
+							//	array into a string before sending it on its merry way
 
 						}
 
@@ -366,9 +496,9 @@ namespace Checksum_Checker {
 							//	Arg2 - the input buffer byte offset - again, do not need the offset, start at the beginning, so set to zero
 							//	Arg3 - the byte count - the amount of bytes from buffer to be read, in this case zero, as we didn't read any new bytes
 
-							e.Result = makeHashString(hasher.Hash);
+							e.Result = makeMD5HashString(hasher.Hash);
 							// Set the Result argument of the DoWorkEventArgs to the computed hash value
-							//	It is run through the custom makeHashString function to first convert the computed byte
+							//	It is run through the custom makeMD5HashString function to first convert the computed byte
 							//	array into a string before sending it on its merry way
 
 						}
@@ -381,9 +511,7 @@ namespace Checksum_Checker {
 						MessageBox.Show("There was an error in your hash selection, please try again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						// Show error that hash is not recognised
 
-						comboboxSelectHashType.Items.Clear();
-						comboboxSelectHashType.Items.AddRange(hashTypes);
-						comboboxSelectHashType.SelectedIndex = 0;
+						resetComboBoxSelectHashType();
 						// Reset the combo box, comboboxSelectHashType
 
 						e.Cancel = true;
@@ -423,7 +551,7 @@ namespace Checksum_Checker {
 			else {
 				// Operation completed successfully
 
-				switch (comboboxSelectHashType.SelectedIndex) {
+				switch (selectedHashType) {
 					// Determines the hash type to be used based on the combo box, comboboxSelectHashType, selection
 
 					case 0:
@@ -447,6 +575,9 @@ namespace Checksum_Checker {
 
 						textboxComputedHash.Text = "Invalid hash selection, how'd you manage that?";
 						// Well, how?
+
+						resetComboBoxSelectHashType();
+						// Reset the combo box, comboboxSelectHashType
 						
 						break;
 				}
