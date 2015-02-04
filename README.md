@@ -10,3 +10,4 @@ It was also my way of branching into C# and having a play, thus the heavy commen
 - Save user preference on default loading hash alorithm
 - Add item queue / allow multiple items? - the application is already threaded, just might be a nice feature
 - Add "export hash to text file" option?
+- GUI updates - it's functional, just, but needs looking at
