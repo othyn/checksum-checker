@@ -24,11 +24,14 @@ namespace Checksum_Checker {
 	// -------------------------
 
 	// TODO -----
+	//	- Find a more versitle/elegant solution other than switch statements, code refactoring time? Code refactoring time.
+	// -----
 	//	- Compare MD5 hash to computed hash and return Yes/No
 	//	- Add SHA1 support
 	//	- Enable / Disable "Get Hash" and "Compare Hash" buttons dynamically on file loaded and hash calculated
 	//	- Add checkbox for "Get and Compare Hash" or just "Get Hash"
 	//	- Save user preference on default loading hash alorithm
+	//	- Add item queue / allow multiple items? - the application is already threaded, just might be a nice feature
 	// -----
 
     public partial class mainForm : Form {
@@ -38,17 +41,11 @@ namespace Checksum_Checker {
 		//	others all the controls you placed on your form in the designer)
 		//	See http://stackoverflow.com/a/4438334
 
-        public mainForm() {
-			// Form object is created
-
-            InitializeComponent();
-			// Call for initialising the form
-			//	It is a required call in all subclasses of Form and it instructs all the components on the form to
-			//	initialise, position, and display themselves as appropriate.
-
-            this.Text = "Checksum Checker V" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            // Sets the Form Title Text plus the current version of the program
-		}
+		// -------------------------
+		
+		string[] hashTypes = new string[] { "SHA1", "MD5" };
+		// Hash types in a string array for loading into the combobox, comboboxSelectHashType
+		//	I'd much rarther keep this in the code, personal preference
 
 		string filePath;
 		// Global String variable to place the file path into (in this case the entire file path also)
@@ -68,6 +65,26 @@ namespace Checksum_Checker {
 
 		OpenFileDialog openFD = new OpenFileDialog();
 		// Creates a global new OpenFileDialog instance openFD
+
+		public mainForm() {
+			// Form object is created
+
+			InitializeComponent();
+			// Call for initialising the form
+			//	It is a required call in all subclasses of Form and it instructs all the components on the form to
+			//	initialise, position, and display themselves as appropriate.
+
+			this.Text = "Checksum Checker V" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+			// Sets the Form Title Text plus the current version of the program
+
+			comboboxSelectHashType.Items.Clear();
+			comboboxSelectHashType.Items.AddRange(hashTypes);
+			comboboxSelectHashType.SelectedIndex = 0;
+			// Clear the current combo box, comboboxSelectHashType, not neccessary but keeps me happy
+			// Set the contents of the combo box, comboboxSelectHashType, from the array set above, hashTypes : see http://stackoverflow.com/a/23835964/4494375
+			//	I'd much rarther keep this in the code side, personal preference
+			// Set default loading item for the combo box, comboboxSelectHashType, to the first item
+		}
 
 		private bool isSHA1Hash(string hash, bool result = false) {
 			// Checks via regex if the given SHA1 Hexadecimal hash is valid
@@ -283,60 +300,98 @@ namespace Checksum_Checker {
 				// Sets the tool strip label, toolstripProgressTotalByteCount, to the value to size
 				//	Used for showing the user progression of the computation alongside the progress bar
 
-				using (HashAlgorithm hasher = MD5.Create()) {
-					// Create a new HashAlgorithm, hasher, of the type MD5 to do the hashing of the users selected file
+				switch (comboboxSelectHashType.SelectedIndex) {
+					// Determines the hash type to be used based on the combo box, comboboxSelectHashType, selection
+					//	See http://stackoverflow.com/a/3382204/4494375 for syntax reference
 
-					do {
-						// See explanation below while... below
+					case 0:
+						// SHA1
 
-						if (computeFileHash.CancellationPending) {
-							// Checks if the background worker, computeFileHash, has been told to cancel
+						using (HashAlgorithm hasher = SHA1.Create()) {
 
-							e.Cancel = true;
-							// Cancel the background worker, computeFileHash
-
-							return;
 						}
 
-						buffer = new byte[4096];
-						// Initialise the buffer to a new byte array, to the size of 4096 bytes
+						break;
 
-						bytesRead = file.Read(buffer, 0, buffer.Length);
-						// Read from the file - Read will return the amount of bytes read, so bytesRead gets updated with that amount
-						//	Arg1 - the buffer to read the file into - in this case the buffer setup just above
-						//	Arg2 - the buffer byte offset - where to start putting the file into the buffer, in this case the beginning, so start at zero
-						//	Arg3 - how many bytes to read - get the buffers length that we setup just above
+					case 1:
+						//MD5
 
-						totalBytesRead += bytesRead;
-						// Update the total for the amount of bytes read so far
+						using (HashAlgorithm hasher = MD5.Create()) {
+							// Create a new HashAlgorithm, hasher, of the type MD5 to do the hashing of the users selected file
 
-						hasher.TransformBlock(buffer, 0, bytesRead, null, 0);
-						// Creates the MD5 hash value for the bytes just read into the buffer, buffer, above
-						//	Arg1 - the input buffer to hash - in this case the buffer, buffer, in which the file was read into above
-						//	Arg2 - the input buffer byte offset - the offset to start reading the file from, in this case the beginning, so start at zero
-						//	Arg3 - the number of bytes to hash - we calculated this into the variable bytesRead above, so pass that as the argument
-						//	Arg4 - place the hash into an output buffer - dont need that, so pass null
-						//	Arg5 - the byte offset for the output buffer - set to zero as we dont need the offset, in both aspects
+							do {
+								// See explanation below while... below
 
-						computeFileHash.ReportProgress((int)((double)totalBytesRead / size * 100));
-						// ReportProgress calls the background workers ProgressChanged function, in this case the
-						//	computeFileHash_ProgressChanged function below with the supplied argument being
-						//	an integer of the percentage of the file currently being hashed
-					}
-					while (bytesRead != 0);
-					// Keep looping over the files buffer until the bytesRead count equals zero, meaning there are no more bytes to be read
-					//	and the file has been processed and can move on to the full hash generation next
+								if (computeFileHash.CancellationPending) {
+									// Checks if the background worker, computeFileHash, has been told to cancel
 
-					hasher.TransformFinalBlock(buffer, 0, 0);
-					// Transform the final block, put all the hashes together to make the full hash
-					//	Arg1 - the input buffer - so just pass the buffer, buffer, again
-					//	Arg2 - the input buffer byte offset - again, do not need the offset, start at the beginning, so set to zero
-					//	Arg3 - the byte count - the amount of bytes from buffer to be read, in this case zero, as we didn't read any new bytes
+									e.Cancel = true;
+									// Cancel the background worker, computeFileHash
 
-					e.Result = makeHashString(hasher.Hash);
-					// Set the Result argument of the DoWorkEventArgs to the computed hash value
-					//	It is run through the custom makeHashString function to first convert the computed byte
-					//	array into a string before sending it on its merry way
+									return;
+								}
+
+								buffer = new byte[4096];
+								// Initialise the buffer to a new byte array, to the size of 4096 bytes
+
+								bytesRead = file.Read(buffer, 0, buffer.Length);
+								// Read from the file - Read will return the amount of bytes read, so bytesRead gets updated with that amount
+								//	Arg1 - the buffer to read the file into - in this case the buffer setup just above
+								//	Arg2 - the buffer byte offset - where to start putting the file into the buffer, in this case the beginning, so start at zero
+								//	Arg3 - how many bytes to read - get the buffers length that we setup just above
+
+								totalBytesRead += bytesRead;
+								// Update the total for the amount of bytes read so far
+
+								hasher.TransformBlock(buffer, 0, bytesRead, null, 0);
+								// Creates the MD5 hash value for the bytes just read into the buffer, buffer, above
+								//	Arg1 - the input buffer to hash - in this case the buffer, buffer, in which the file was read into above
+								//	Arg2 - the input buffer byte offset - the offset to start reading the file from, in this case the beginning, so start at zero
+								//	Arg3 - the number of bytes to hash - we calculated this into the variable bytesRead above, so pass that as the argument
+								//	Arg4 - place the hash into an output buffer - dont need that, so pass null
+								//	Arg5 - the byte offset for the output buffer - set to zero as we dont need the offset, in both aspects
+
+								computeFileHash.ReportProgress((int)((double)totalBytesRead / size * 100));
+								// ReportProgress calls the background workers ProgressChanged function, in this case the
+								//	computeFileHash_ProgressChanged function below with the supplied argument being
+								//	an integer of the percentage of the file currently being hashed
+							}
+							while (bytesRead != 0);
+							// Keep looping over the files buffer until the bytesRead count equals zero, meaning there are no more bytes to be read
+							//	and the file has been processed and can move on to the full hash generation next
+
+							hasher.TransformFinalBlock(buffer, 0, 0);
+							// Transform the final block, put all the hashes together to make the full hash
+							//	Arg1 - the input buffer - so just pass the buffer, buffer, again
+							//	Arg2 - the input buffer byte offset - again, do not need the offset, start at the beginning, so set to zero
+							//	Arg3 - the byte count - the amount of bytes from buffer to be read, in this case zero, as we didn't read any new bytes
+
+							e.Result = makeHashString(hasher.Hash);
+							// Set the Result argument of the DoWorkEventArgs to the computed hash value
+							//	It is run through the custom makeHashString function to first convert the computed byte
+							//	array into a string before sending it on its merry way
+
+						}
+
+						break;
+
+					default:
+						// Not a valid hash type
+
+						MessageBox.Show("There was an error in your hash selection, please try again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						// Show error that hash is not recognised
+
+						comboboxSelectHashType.Items.Clear();
+						comboboxSelectHashType.Items.AddRange(hashTypes);
+						comboboxSelectHashType.SelectedIndex = 0;
+						// Reset the combo box, comboboxSelectHashType
+
+						e.Cancel = true;
+						// Cancel the background worker, computeFileHash
+
+						return;
+
+						break;
 				}
 			}
 		}
@@ -368,8 +423,33 @@ namespace Checksum_Checker {
 			else {
 				// Operation completed successfully
 
-				textboxComputedHash.Text = computedMD5Hash = e.Result.ToString();
-				// Set the text of the textbox, textboxComputedHash, to the computed MD5 hash value
+				switch (comboboxSelectHashType.SelectedIndex) {
+					// Determines the hash type to be used based on the combo box, comboboxSelectHashType, selection
+
+					case 0:
+						// SHA1
+
+						textboxComputedHash.Text = computedSHA1Hash = e.Result.ToString();
+						// Set the text of the textbox, textboxComputedHash, to the computed MD5 hash value
+
+						break;
+
+					case 1:
+						// MD5
+
+						textboxComputedHash.Text = computedMD5Hash = e.Result.ToString();
+						// Set the text of the textbox, textboxComputedHash, to the computed MD5 hash value
+
+						break;
+
+					default:
+						// Invalid
+
+						textboxComputedHash.Text = "Invalid hash selection, how'd you manage that?";
+						// Well, how?
+						
+						break;
+				}
 			}
 			// Found out this state reporting at the link below
 			//	See http://stackoverflow.com/a/5921494
@@ -418,7 +498,7 @@ namespace Checksum_Checker {
 			// This function fires ONLY when the user changes the combobox value, not when its changed programmatically
 			//	See http://stackoverflow.com/a/1066069/4494375
 
-
+			// The switch statements are ugly, might use this, but probably not
 		}
 
     }
