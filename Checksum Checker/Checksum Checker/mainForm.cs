@@ -26,12 +26,11 @@ namespace Checksum_Checker {
 	// TODO -----
 	//	- Find a more versitle/elegant solution other than switch statements, code refactoring time? Code refactoring time.
 	// -----
-	//	- Compare MD5 hash to computed hash and return Yes/No
-	//	- Add SHA1 support
 	//	- Enable / Disable "Get Hash" and "Compare Hash" buttons dynamically on file loaded and hash calculated
 	//	- Add checkbox for "Get and Compare Hash" or just "Get Hash"
 	//	- Save user preference on default loading hash alorithm
 	//	- Add item queue / allow multiple items? - the application is already threaded, just might be a nice feature
+	//	- Add "export hash to text file" option?
 	// -----
 
     public partial class mainForm : Form {
@@ -306,12 +305,14 @@ namespace Checksum_Checker {
 						// Send the content of the text box, textboxHashToCompare, to the isMD5Hash function to check if the user
 						//	has entered a valid SHA1 hash
 
-						if (textboxHashToCompare.Text == computedSHA1Hash) {
-							MessageBox.Show("Success!\n\nThey are a match, it seems you have the correct file!\n\n:D", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						if (string.Equals(textboxHashToCompare.Text, computedSHA1Hash, StringComparison.OrdinalIgnoreCase)) {
+							// Fixed a bug with strings being case sensitive : see http://stackoverflow.com/a/6371250/4494375
+
+							MessageBox.Show("Success! They are a match!\n\nIt seems this is the file you are looking for. *un-waves hand*", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 							// Computed and Compared MD5 Hashes are the same
 						}
 						else {
-							MessageBox.Show("Warning!\n\nThese hashes do not match, you may have the wrong file or it has been sabotaged!\n\nI'd recommend re-downloading it directly from the source and trying again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							MessageBox.Show("Warning! These hashes do not match!\n\nThis is not the file you are looking for. *waves hand*\n\nI'd recommend re-downloading it directly from the source and trying again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 							// Computed and Compared MD5 Hashes are NOT the same
 						}
 					}
@@ -328,13 +329,15 @@ namespace Checksum_Checker {
 					if (isMD5Hash(textboxHashToCompare.Text)) {
 						// Send the content of the text box, textboxHashToCompare, to the isMD5Hash function to check if the user
 						//	has entered a valid MD5 hash
+						
+						if (string.Equals(textboxHashToCompare.Text, computedMD5Hash, StringComparison.OrdinalIgnoreCase)) {
+							// Fixed a bug with strings being case sensitive : see http://stackoverflow.com/a/6371250/4494375
 
-						if (textboxHashToCompare.Text == computedMD5Hash) {
-							MessageBox.Show("Success!\n\nThey are a match, it seems you have the correct file!\n\n:D", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+							MessageBox.Show("Success! They are a match!\n\nIt seems this is the file you are looking for. *un-waves hand*", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 							// Computed and Compared MD5 Hashes are the same
 						}
 						else {
-							MessageBox.Show("Warning!\n\nThese hashes do not match, you may have the wrong file or it has been sabotaged!\n\nI'd suggest re-downloading it directly from the source and trying again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							MessageBox.Show("Warning! These hashes do not match!\n\nThis is not the file you are looking for. *waves hand*\n\nI'd recommend re-downloading it directly from the source and trying again.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 							// Computed and Compared MD5 Hashes are NOT the same
 						}
 					}

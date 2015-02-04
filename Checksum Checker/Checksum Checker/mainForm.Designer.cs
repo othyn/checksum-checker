@@ -102,9 +102,9 @@
 			this.labelHashToCompare.AutoSize = true;
 			this.labelHashToCompare.Location = new System.Drawing.Point(12, 155);
 			this.labelHashToCompare.Name = "labelHashToCompare";
-			this.labelHashToCompare.Size = new System.Drawing.Size(92, 13);
+			this.labelHashToCompare.Size = new System.Drawing.Size(186, 13);
 			this.labelHashToCompare.TabIndex = 2;
-			this.labelHashToCompare.Text = "Hash to Compare:";
+			this.labelHashToCompare.Text = "Hash to Compare: (not case sensitive)";
 			// 
 			// buttonOpenFileDialog
 			// 
@@ -235,6 +235,7 @@
 			// 
 			// comboboxSelectHashType
 			// 
+			this.comboboxSelectHashType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboboxSelectHashType.FormattingEnabled = true;
 			this.comboboxSelectHashType.Location = new System.Drawing.Point(12, 73);
 			this.comboboxSelectHashType.Name = "comboboxSelectHashType";
