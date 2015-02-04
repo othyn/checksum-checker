@@ -9,3 +9,4 @@ It was also my way of branching into C# and having a play, thus the heavy commen
 - Add checkbox for "Get and Compare Hash" or just "Get Hash"
 - Save user preference on default loading hash alorithm
 - Add item queue / allow multiple items? - the application is already threaded, just might be a nice feature
+- Add "export hash to text file" option?
