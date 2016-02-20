@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="Checksum Checker.exe" version="1.0.0.0" publicKeyToken="21aeb1fb5960428f" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Checksum Checker" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Checksum Checker.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Checksum Checker.exe" size="19968">
+      <assemblyIdentity name="Checksum Checker" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>gjPameL2qSwcTaUyEj9YhL8wFSLGxoC5fy/DLBuIHMg=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="Checksum Checker.exe.config" size="187">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>xm4bo26HQ0LNVwz1vdPYtzhkpMnp2AI5i+f0b+OahTI=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=OXWIN\benny" issuerKeyHash="65beed24b996ac26bff197c1429f91c039039146" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>uRmGEGYQ2HkA94LiruZdGhP2QKsUcPv3je+ZQYC54lY=</DigestValue></Reference></SignedInfo><SignatureValue>mgg5fRlWdyqTzh46XNr0S2Nr4J3hlFuPz+PG6n0b8VCNNbhopqYzZRUV5SRzz1gDX8weuGbcHksvCY/j9NZtOqCHlnInSB3UV8MNYD8OZWA/EJ/JwjnDDR3lIC2uuWJbwkBCnIaoV807fcQCNB35EyQYlyvXPnVQNxMoJoVk0rw=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>qCyoMBK4LVpQn7y1TVLvD7ocyQE3mO7Z61LFxkwPxFT6iX2G6WAiPd1I8ItfPVpxt3FwBDeBiPwpXVZKK9UuSIBRQE3xOHkKsHyBm6nog7oY0db2ND7J9/jKur1i1drf+4wZpizZ0daCDUTi0zx0uvNCgEQJlQ2cmIjfsdAl7Hc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="56e2b9804199ef8df7fb7014ab40f6131a5de6aee282f70079d81066108619b9" Description="" Url=""><as:assemblyIdentity name="Checksum Checker.exe" version="1.0.0.0" publicKeyToken="21aeb1fb5960428f" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=OXWIN\benny</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>H8aGhDilneNqYw8VBUnhapaF+jK8+sV3D5DWeiJBbp4=</DigestValue></Reference></SignedInfo><SignatureValue>o3HIPzDTr1EK2gIk4pFOgY7JVtaZECNnXsj+N9yb2UmSr9kS8HkQ5f2U7xwKMRPHgccZaSDgjcSArI+BlkIa+Dn29KRE/oP7R12WL1v0WSMK4ALpY/bLmUvXJsrM2m58MokZyz4BQ9MuYCVTR26Dfz+lurSSp3jI228y/tamYD4=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>qCyoMBK4LVpQn7y1TVLvD7ocyQE3mO7Z61LFxkwPxFT6iX2G6WAiPd1I8ItfPVpxt3FwBDeBiPwpXVZKK9UuSIBRQE3xOHkKsHyBm6nog7oY0db2ND7J9/jKur1i1drf+4wZpizZ0daCDUTi0zx0uvNCgEQJlQ2cmIjfsdAl7Hc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIBxTCCAS6gAwIBAgIQVukRxMvRj71MnA345nqaqDANBgkqhkiG9w0BAQsFADAhMR8wHQYDVQQDHhYATwBYAFcASQBOAFwAYgBlAG4AbgB5MB4XDTE1MTAxNjIyNDIwN1oXDTE2MTAxNjA0NDIwN1owITEfMB0GA1UEAx4WAE8AWABXAEkATgBcAGIAZQBuAG4AeTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAqCyoMBK4LVpQn7y1TVLvD7ocyQE3mO7Z61LFxkwPxFT6iX2G6WAiPd1I8ItfPVpxt3FwBDeBiPwpXVZKK9UuSIBRQE3xOHkKsHyBm6nog7oY0db2ND7J9/jKur1i1drf+4wZpizZ0daCDUTi0zx0uvNCgEQJlQ2cmIjfsdAl7HcCAwEAATANBgkqhkiG9w0BAQsFAAOBgQAt+Zn+2WiNRHIcAFh/GixYKCg2x94Lyd5I0CMJKmOijws5ff9sXz3a58hXneaMJYdgm4woO8LzuSVsajWW8CU7Ec5ra6RhkgLA6CrIvG6yZBh2WN7hbHSsIqVsw3ytrj5/utaSgvDgJlW17DZcV+6ZcDlmmmc23OdJJsbT0jEgfA==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

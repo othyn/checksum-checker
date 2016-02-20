@@ -4,6 +4,7 @@ File checksum checker written in C# (Windows Form based), as a personal alternat
 It was also my way of branching into C# and having a play, thus the heavy commenting and references as to make sure I thoroughly understand what I'm writing. By the end of the project, I had taken on board new concepts and had quite a bit of fun just adding functionality out of my own fruition. The side benefit of this project was providing a tool in which I will find personally useful.
 
 ## Todo
+- Drag and drop file functionality
 - Find a more versitle/elegant solution other than switch statements, code refactoring time? Code refactoring time.
 - Enable / Disable "Get Hash" and "Compare Hash" buttons dynamically on file loaded and hash calculated
 - Add checkbox for "Get and Compare Hash" or just "Get Hash"
